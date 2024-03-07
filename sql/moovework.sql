@@ -1,4 +1,5 @@
 #This file has been added to create the initial database required to run the vita program
+#Descargar el conector java adecuado de https://jdbc.postgresql.org/
 
 DROP DATABASE IF EXISTS moovetemplate;
 CREATE DATABASE moovetemplate TEMPLATE=postgis_21_sample;
