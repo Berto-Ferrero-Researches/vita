@@ -35,8 +35,8 @@ ALTER TABLE floor OWNER TO postgres;
 
 CREATE TABLE IF NOT EXISTS partition (
     item_id serial NOT NULL PRIMARY KEY,
-    flooritem_floorid integer,
-    CONSTRAINT part_to_floor_fkey FOREIGN KEY (flooritem_floorid)
+    floor_id integer,
+    CONSTRAINT part_to_floor_fkey FOREIGN KEY (floor_id)
         REFERENCES floor (item_id) MATCH SIMPLE
         ON UPDATE CASCADE ON DELETE CASCADE
 ) INHERITS (item);
@@ -59,9 +59,9 @@ ALTER TABLE decomprel OWNER TO postgres;
 
 CREATE TABLE IF NOT EXISTS accesspoint (
     item_id serial NOT NULL PRIMARY KEY,
-    flooritem_floorid integer,
+    floor_id integer,
     ap_type integer,
-    CONSTRAINT ap_To_floor_fkey FOREIGN KEY (flooritem_floorid)
+    CONSTRAINT ap_To_floor_fkey FOREIGN KEY (floor_id)
         REFERENCES floor (item_id) MATCH SIMPLE
         ON UPDATE CASCADE ON DELETE CASCADE
 ) INHERITS (item);
@@ -73,9 +73,9 @@ CREATE INDEX ap_line_gist ON accesspoint USING GIST (ap_line);
 
 CREATE TABLE IF NOT EXISTS accesspoint (
     item_id serial NOT NULL PRIMARY KEY,
-    flooritem_floorid integer,
+    floor_id integer,
     ap_type integer,
-    CONSTRAINT ap_To_floor_fkey FOREIGN KEY (flooritem_floorid)
+    CONSTRAINT ap_To_floor_fkey FOREIGN KEY (floor_id)
         REFERENCES floor (item_id) MATCH SIMPLE
         ON UPDATE CASCADE ON DELETE CASCADE
 ) INHERITS (item);
@@ -89,10 +89,10 @@ CREATE TABLE IF NOT EXISTS connector (
     item_id serial NOT NULL PRIMARY KEY,
     item_globalid varchar(50),
     item_name varchar(100),
-    flooritem_floorid integer NOT NULL,
+    floor_id integer NOT NULL,
     ap_type integer,
     conn_upperfloor integer,
-    CONSTRAINT conn_floor_fk FOREIGN KEY (flooritem_floorid)
+    CONSTRAINT conn_floor_fk FOREIGN KEY (floor_id)
         REFERENCES floor (item_id) MATCH SIMPLE
         ON UPDATE CASCADE ON DELETE CASCADE
 ) INHERITS (accesspoint);
@@ -169,4 +169,6 @@ CREATE FUNCTION ins_connectivity() RETURNS trigger AS '
 CREATE TRIGGER trig_a2p_connectivity BEFORE INSERT
 ON aptopart FOR each ROW
 EXECUTE PROCEDURE ins_connectivity();
+
+
 
